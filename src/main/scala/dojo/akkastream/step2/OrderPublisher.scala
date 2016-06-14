@@ -1,21 +1,21 @@
 package dojo.akkastream.step2
 
-import java.math.BigInteger
+import java.util.UUID.randomUUID
 
 import akka.actor.{ActorLogging, Props}
 import akka.stream.actor.ActorPublisher
 import akka.stream.actor.ActorPublisherMessage.{Cancel, Request}
 
 import scala.concurrent.duration.FiniteDuration
+import scala.util.Random
 
 object OrderPublisher {
 
   def props(delay: FiniteDuration) = Props(new OrderPublisher(delay))
 }
 
-class OrderPublisher(delay: FiniteDuration) extends ActorPublisher[BigInteger] with ActorLogging {
-  var prev = BigInteger.ZERO
-  var curr = BigInteger.ZERO
+class OrderPublisher(delay: FiniteDuration) extends ActorPublisher[Order] with ActorLogging {
+  var index: Long = 0L
 
   def receive = {
     case Request(count) =>
@@ -31,22 +31,17 @@ class OrderPublisher(delay: FiniteDuration) extends ActorPublisher[BigInteger] w
 
   def publishAsPossible() {
     while(isActive && totalDemand > 0) {
-      onNext(getNextNumber())
+      onNext(getNextOrder())
     }
   }
 
-  def getNextNumber(): BigInteger = {
-    // Compute Fibonacci number
-    if(curr == BigInteger.ZERO) {
-      curr = BigInteger.ONE
-    } else {
-      val tmp = prev.add(curr)
-      prev = curr
-      curr = tmp
-    }
+  def getNextOrder(): Order = {
+    // Random Order
+    val order = Order(index, randomUUID().toString, Random.nextLong(), Random.nextDouble(), randomUUID().toString)
+    index += 1
 
     // Artificial delay
     Thread.sleep(delay.toMillis)
-    curr
+    order
   }
 }
