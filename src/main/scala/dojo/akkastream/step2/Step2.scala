@@ -11,6 +11,7 @@ import scala.util.{Failure, Success, Try}
 
 object Step2 {
 
+  // TODO: Configure your Dynamo prefix
   val DynamoTablePrefix = "Dojo.CVE."
 }
 
@@ -42,9 +43,8 @@ object Step2_2 extends App {
   val parallelism = 4
 
   system.log.info("Running Stream")
-  source
-    .mapAsync(parallelism)(services.saveOrderAsync)
-    .runWith(sink)
+  // TODO: Use mapAsync to run service calls in parallel
+  ???
 }
 
 object Step2_3 extends App {
@@ -59,11 +59,6 @@ object Step2_3 extends App {
   val parallelism = 4
 
   system.log.info("Running Stream")
-  source
-    .mapAsync(parallelism)(services.saveOrderAsync)
-    .mapAsync(parallelism) {
-      case Success(order) => services.auditOrderResultsAsync(order)
-      case Failure(error) => Future.successful(Failure(error))
-    }
-    .runWith(sink)
+  // TODO: Add an audit step for success results orders
+  ???
 }

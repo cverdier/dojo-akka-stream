@@ -14,30 +14,23 @@ object OrderResultSubscriber {
 }
 
 class OrderResultSubscriber(maxInFilght: Int, delay: FiniteDuration) extends ActorSubscriber with ActorLogging {
-  var currentInFlight: Int = 0
+
+  // TODO Step2_1: MaxInFlightRequestStrategy require you to track inFlight messages
   val requestStrategy = new MaxInFlightRequestStrategy(maxInFilght) {
-    override def inFlightInternally: Int = currentInFlight
+    override def inFlightInternally: Int = ???
     override def batchSize: Int = maxInFilght
   }
 
+  // TODO Step2_1: implement the Akka interface
   def receive = {
     case OnNext(result: Try[Order]) =>
-      currentInFlight += 1
-      result
-        .map { order => orderSuccess(order) }
-        .recover { case NonFatal(error) => orderFailure(error) }
-
-      // Artificial delay
-      Thread.sleep(delay.toMillis)
-      currentInFlight -= 1
+      ???
 
     case OnError(err: Exception) =>
-      log.error(err, "Receieved Exception in Stream -- Stopping")
-      context.stop(self)
+      ???
 
     case OnComplete =>
-      log.info("Stream Completed! -- Stopping")
-      context.stop(self)
+      ???
 
     case _ =>
   }

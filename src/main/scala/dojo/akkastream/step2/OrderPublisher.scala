@@ -17,22 +17,15 @@ object OrderPublisher {
 class OrderPublisher(delay: FiniteDuration) extends ActorPublisher[Order] with ActorLogging {
   var index: Long = 0L
 
+  // TODO Step2_1 implement the Akka interface
   def receive = {
     case Request(count) =>
-      log.info(s"Received Request ($count) from Subscriber")
-      publishAsPossible()
+      ???
 
     case Cancel =>
-      log.info("Cancel Message Received -- Stopping")
-      context.stop(self)
+      ???
 
     case _ =>
-  }
-
-  def publishAsPossible() {
-    while(isActive && totalDemand > 0) {
-      onNext(getNextOrder())
-    }
   }
 
   def getNextOrder(): Order = {

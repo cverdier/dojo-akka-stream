@@ -27,11 +27,7 @@ class Services(system: ActorSystem) {
     }
   }
 
-  def saveOrderAsync(order: Order): Future[Try[Order]] = {
-    Future {
-      saveOrder(order)
-    }
-  }
+  // TODO Step2_2: method to use wiht mapAsync and parallelism
 
   protected def doAuditOrder(order: Order): Try[Order] = {
     Try {
