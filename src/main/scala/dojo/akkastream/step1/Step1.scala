@@ -10,7 +10,9 @@ import com.typesafe.config.ConfigFactory
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
 
-object Step1 extends App {
+object Step1
+
+object Step1_1 extends App {
 
   implicit val system = ActorSystem("step1_1", ConfigFactory.empty())
   implicit val materializer: Materializer = ActorMaterializer()
